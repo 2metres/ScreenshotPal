@@ -1,9 +1,11 @@
 import Foundation
 import AppKit
+import AVFoundation
 import Combine
 
 class ScreenshotStore: ObservableObject {
     @Published var screenshots: [Screenshot] = []
+    @Published var selectedID: UUID?
 
     private var screenshotDirectory: URL
     private var fileWatcher: DispatchSourceFileSystemObject?
@@ -32,21 +34,36 @@ class ScreenshotStore: ObservableObject {
         do {
             let files = try fileManager.contentsOfDirectory(at: screenshotDirectory, includingPropertiesForKeys: [.creationDateKey])
 
+            let supportedExtensions: Set<String> = ["png", "mov"]
             var loaded = files
-                .filter { $0.pathExtension.lowercased() == "png" && $0.lastPathComponent.contains("Screenshot") }
+                .filter { supportedExtensions.contains($0.pathExtension.lowercased()) &&
+                    ($0.lastPathComponent.contains("Screenshot") || $0.lastPathComponent.contains("Screen Recording")) }
                 .map { Screenshot(url: $0) }
                 .sorted { $0.createdAt > $1.createdAt }
                 .prefix(30)
                 .map { $0 }
 
             for i in loaded.indices {
-                loaded[i].image = NSImage(contentsOf: loaded[i].url)
+                if loaded[i].isVideo {
+                    loaded[i].image = Self.videoThumbnail(for: loaded[i].url)
+                } else {
+                    loaded[i].image = NSImage(contentsOf: loaded[i].url)
+                }
             }
 
             screenshots = loaded
         } catch {
             print("Error loading screenshots: \(error)")
         }
+    }
+
+    private static func videoThumbnail(for url: URL) -> NSImage? {
+        let asset = AVAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        generator.maximumSize = CGSize(width: 400, height: 400)
+        guard let cgImage = try? generator.copyCGImage(at: .zero, actualTime: nil) else { return nil }
+        return NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
     }
 
     private func startWatching() {

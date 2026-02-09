@@ -6,12 +6,14 @@ struct Screenshot: Identifiable, Hashable {
     let url: URL
     let filename: String
     let createdAt: Date
+    let isVideo: Bool
     var image: NSImage?
 
     init(url: URL) {
         self.url = url
         self.filename = url.lastPathComponent
         self.createdAt = (try? FileManager.default.attributesOfItem(atPath: url.path)[.creationDate] as? Date) ?? Date()
+        self.isVideo = url.pathExtension.lowercased() == "mov"
     }
 
     static func == (lhs: Screenshot, rhs: Screenshot) -> Bool {

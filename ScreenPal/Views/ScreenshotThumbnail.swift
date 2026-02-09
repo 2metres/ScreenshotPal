@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 struct ScreenshotThumbnail: View {
     let screenshot: Screenshot
@@ -23,6 +24,23 @@ struct ScreenshotThumbnail: View {
             }
         }
         .overlay(
+            Group {
+                if screenshot.isVideo {
+                    ZStack {
+                        Circle()
+                            .fill(.ultraThinMaterial)
+                            .frame(width: 32, height: 32)
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.white)
+                            .offset(x: 1)
+                    }
+                    .shadow(radius: 3)
+                }
+            },
+            alignment: .center
+        )
+        .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(isSelected ? Color.accentColor : (isHovering ? Color.accentColor.opacity(0.5) : Color.clear), lineWidth: 2)
         )
@@ -37,6 +55,47 @@ struct ScreenshotThumbnail: View {
         }
         .onTapGesture(count: 1) {
             onSelect()
+        }
+        .contextMenu {
+            Button("Open") {
+                NSWorkspace.shared.open(screenshot.url)
+            }
+
+            Menu("Open With") {
+                let appURLs = NSWorkspace.shared.urlsForApplications(toOpen: screenshot.url)
+                let defaultApp = NSWorkspace.shared.urlForApplication(toOpen: screenshot.url)
+
+                ForEach(appURLs.sorted(by: { $0.lastPathComponent < $1.lastPathComponent }), id: \.self) { appURL in
+                    let appName = appURL.deletingPathExtension().lastPathComponent
+                    Button {
+                        NSWorkspace.shared.open([screenshot.url], withApplicationAt: appURL, configuration: NSWorkspace.OpenConfiguration())
+                    } label: {
+                        if appURL == defaultApp {
+                            Text(appName) + Text(" (Default)")
+                                .foregroundColor(.secondary)
+                        } else {
+                            Text(appName)
+                        }
+                    }
+                }
+            }
+
+            Divider()
+
+            Button("Show in Finder") {
+                NSWorkspace.shared.activateFileViewerSelecting([screenshot.url])
+            }
+
+            Button("Copy") {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.writeObjects([screenshot.url as NSURL])
+            }
+
+            Divider()
+
+            Button("Move to Trash", role: .destructive) {
+                try? FileManager.default.trashItem(at: screenshot.url, resultingItemURL: nil)
+            }
         }
         .help(screenshot.filename)
     }
