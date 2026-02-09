@@ -1,0 +1,11 @@
+#!/bin/sh
+# Runs SwiftFormat on staged .swift files before commit
+STAGED=$(git diff --cached --name-only --diff-filter=ACM -- '*.swift')
+if [ -n "$STAGED" ]; then
+    if command -v swiftformat &>/dev/null; then
+        echo "$STAGED" | xargs swiftformat
+        echo "$STAGED" | xargs git add
+    else
+        echo "warning: SwiftFormat not installed, skipping pre-commit format"
+    fi
+fi

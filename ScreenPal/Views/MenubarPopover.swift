@@ -20,7 +20,7 @@ class QuickLookCoordinator {
         } else {
             let preview = QLPreviewView(frame: NSRect(x: 0, y: 0, width: 600, height: 500))!
             preview.previewItem = url as NSURL
-            self.previewView = preview
+            previewView = preview
 
             let window = NonActivatingPanel(
                 contentRect: NSRect(x: 0, y: 0, width: 600, height: 500),
@@ -34,7 +34,7 @@ class QuickLookCoordinator {
             window.isFloatingPanel = true
             window.hidesOnDeactivate = false
             window.isReleasedWhenClosed = false
-            self.panel = window
+            panel = window
             window.orderFront(nil)
         }
         appDelegate?.preventClose = true
@@ -51,8 +51,13 @@ class QuickLookCoordinator {
 }
 
 class NonActivatingPanel: NSPanel {
-    override var canBecomeKey: Bool { true }
-    override var canBecomeMain: Bool { false }
+    override var canBecomeKey: Bool {
+        true
+    }
+
+    override var canBecomeMain: Bool {
+        false
+    }
 }
 
 struct MenubarPopover: View {
@@ -116,8 +121,13 @@ struct MenubarPopover: View {
                 } else {
                     ScrollViewReader { proxy in
                         ScrollView {
-                            ScreenshotGrid(screenshots: store.screenshots, thumbnails: store.thumbnails, selectedID: $store.selectedID, columnCount: directoryManager.gridColumns)
-                                .padding()
+                            ScreenshotGrid(
+                                screenshots: store.screenshots,
+                                thumbnails: store.thumbnails,
+                                selectedID: $store.selectedID,
+                                columnCount: directoryManager.gridColumns
+                            )
+                            .padding()
                         }
                         .onAppear { scrollProxy = proxy }
                     }
@@ -148,7 +158,8 @@ struct MenubarPopover: View {
                     if quickLook.isOpen {
                         quickLook.close()
                     } else if let id = store.selectedID,
-                              let screenshot = store.screenshots.first(where: { $0.id == id }) {
+                              let screenshot = store.screenshots.first(where: { $0.id == id })
+                    {
                         quickLook.open(url: screenshot.url)
                     }
                     return nil
@@ -158,10 +169,10 @@ struct MenubarPopover: View {
                 let columns = directoryManager.gridColumns
                 let delta: Int? = {
                     switch event.keyCode {
-                    case 123: return -1         // left
-                    case 124: return 1          // right
-                    case 125: return columns    // down
-                    case 126: return -columns   // up
+                    case 123: return -1 // left
+                    case 124: return 1 // right
+                    case 125: return columns // down
+                    case 126: return -columns // up
                     default: return nil
                     }
                 }()

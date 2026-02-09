@@ -2,7 +2,6 @@ import XCTest
 @testable import ScreenPal
 
 final class ScreenshotTests: XCTestCase {
-
     // MARK: - Screenshot Model
 
     func testScreenshotFromPNG() {
@@ -51,10 +50,14 @@ final class ScreenshotTests: XCTestCase {
         let screenshot = Screenshot(url: url)
         let now = Date()
 
-        XCTAssertEqual(screenshot.createdAt.timeIntervalSinceReferenceDate, now.timeIntervalSinceReferenceDate, accuracy: 2.0)
+        XCTAssertEqual(
+            screenshot.createdAt.timeIntervalSinceReferenceDate,
+            now.timeIntervalSinceReferenceDate,
+            accuracy: 2.0
+        )
     }
 
-    func testScreenshotCreatedAtFromFile() throws {
+    func testScreenshotCreatedAtFromFile() {
         let tmp = FileManager.default.temporaryDirectory.appendingPathComponent("Screenshot test file.png")
         FileManager.default.createFile(atPath: tmp.path, contents: Data())
         defer { try? FileManager.default.removeItem(at: tmp) }
@@ -62,6 +65,10 @@ final class ScreenshotTests: XCTestCase {
         let screenshot = Screenshot(url: tmp)
         let now = Date()
 
-        XCTAssertEqual(screenshot.createdAt.timeIntervalSinceReferenceDate, now.timeIntervalSinceReferenceDate, accuracy: 2.0)
+        XCTAssertEqual(
+            screenshot.createdAt.timeIntervalSinceReferenceDate,
+            now.timeIntervalSinceReferenceDate,
+            accuracy: 2.0
+        )
     }
 }

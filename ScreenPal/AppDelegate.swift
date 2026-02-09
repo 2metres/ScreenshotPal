@@ -13,24 +13,32 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     var preventClose = false
     private var clickMonitor: Any?
 
-    func applicationDidFinishLaunching(_ notification: Notification) {
+    func applicationDidFinishLaunching(_: Notification) {
         if let iconURL = Bundle.main.url(forResource: "AppIcon", withExtension: "png"),
-           let icon = NSImage(contentsOf: iconURL) {
+           let icon = NSImage(contentsOf: iconURL)
+        {
             NSApplication.shared.applicationIconImage = icon
         }
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
         if let button = statusItem?.button {
-            button.image = NSImage(systemSymbolName: "photo.on.rectangle.angled.fill", accessibilityDescription: "Screenshots")
+            button.image = NSImage(
+                systemSymbolName: "photo.on.rectangle.angled.fill",
+                accessibilityDescription: "Screenshots"
+            )
             button.action = #selector(togglePopover)
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
 
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "Quit ScreenPal", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(
+            title: "Quit ScreenPal",
+            action: #selector(NSApplication.terminate(_:)),
+            keyEquivalent: "q"
+        ))
         statusItem?.menu = nil
-        self.statusMenu = menu
+        statusMenu = menu
 
         popover = NSPopover()
         popover?.contentSize = NSSize(width: 320, height: 400)
@@ -69,7 +77,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     }
 
     private func startClickMonitor() {
-        clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+        clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [
+            .leftMouseDown,
+            .rightMouseDown,
+        ]) { [weak self] event in
             guard let self = self else { return }
 
             // Don't close if click landed on any of our own windows
@@ -92,11 +103,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         }
     }
 
-    func popoverShouldClose(_ popover: NSPopover) -> Bool {
+    func popoverShouldClose(_: NSPopover) -> Bool {
         !preventClose
     }
 
-    func popoverDidClose(_ notification: Notification) {
+    func popoverDidClose(_: Notification) {
         stopClickMonitor()
         NotificationCenter.default.post(name: .popoverDidClose, object: nil)
     }

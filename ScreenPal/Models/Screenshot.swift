@@ -10,9 +10,9 @@ struct Screenshot: Identifiable, Hashable {
 
     init(url: URL) {
         self.url = url
-        self.filename = url.lastPathComponent
-        self.createdAt = (try? FileManager.default.attributesOfItem(atPath: url.path)[.creationDate] as? Date) ?? Date()
-        self.isVideo = url.pathExtension.lowercased() == "mov"
+        filename = url.lastPathComponent
+        createdAt = (try? FileManager.default.attributesOfItem(atPath: url.path)[.creationDate] as? Date) ?? Date()
+        isVideo = url.pathExtension.lowercased() == "mov"
     }
 
     static func == (lhs: Screenshot, rhs: Screenshot) -> Bool {

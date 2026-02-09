@@ -81,7 +81,11 @@ struct ScreenshotThumbnail: View {
                 ForEach(appURLs.sorted(by: { $0.lastPathComponent < $1.lastPathComponent }), id: \.self) { appURL in
                     let appName = appURL.deletingPathExtension().lastPathComponent
                     Button {
-                        NSWorkspace.shared.open([screenshot.url], withApplicationAt: appURL, configuration: NSWorkspace.OpenConfiguration())
+                        NSWorkspace.shared.open(
+                            [screenshot.url],
+                            withApplicationAt: appURL,
+                            configuration: NSWorkspace.OpenConfiguration()
+                        )
                     } label: {
                         if appURL == defaultApp {
                             Text(appName) + Text(" (Default)")

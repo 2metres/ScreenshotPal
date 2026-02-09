@@ -21,7 +21,7 @@ class ScreenshotDirectoryManager: ObservableObject {
 
     init() {
         let saved = UserDefaults.standard.integer(forKey: Self.gridColumnsKey)
-        gridColumns = (1...4).contains(saved) ? saved : 3
+        gridColumns = (1 ... 4).contains(saved) ? saved : 3
         if let customPath = UserDefaults.standard.string(forKey: Self.customPathKey) {
             directoryURL = URL(fileURLWithPath: customPath)
             source = .custom
@@ -54,7 +54,8 @@ class ScreenshotDirectoryManager: ObservableObject {
 
     private static func detectOSDefault() -> URL {
         if let screencaptureDefaults = UserDefaults(suiteName: "com.apple.screencapture"),
-           let location = screencaptureDefaults.string(forKey: "location") {
+           let location = screencaptureDefaults.string(forKey: "location")
+        {
             let expanded = (location as NSString).expandingTildeInPath
             let url = URL(fileURLWithPath: expanded)
             if FileManager.default.fileExists(atPath: url.path) {

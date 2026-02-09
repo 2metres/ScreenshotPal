@@ -3,7 +3,6 @@ import Combine
 @testable import ScreenPal
 
 final class ScreenshotStoreTests: XCTestCase {
-
     private var tempDir: URL!
 
     override func setUp() {
@@ -102,7 +101,7 @@ final class ScreenshotStoreTests: XCTestCase {
 
     // MARK: - Sorting
 
-    func testSortedNewestFirst() throws {
+    func testSortedNewestFirst() {
         let file1 = tempDir.appendingPathComponent("Screenshot A.png")
         let file2 = tempDir.appendingPathComponent("Screenshot B.png")
 
@@ -121,7 +120,7 @@ final class ScreenshotStoreTests: XCTestCase {
     // MARK: - Limit
 
     func testLimitsTo30Items() {
-        for i in 1...40 {
+        for i in 1 ... 40 {
             createPNG("Screenshot \(i).png")
         }
 
@@ -141,13 +140,13 @@ final class ScreenshotStoreTests: XCTestCase {
 
     // MARK: - Update Directory
 
-    func testUpdateDirectorySwitchesContent() {
+    func testUpdateDirectorySwitchesContent() throws {
         createPNG("Screenshot original.png")
         let store = ScreenshotStore(directory: tempDir)
         XCTAssertEqual(store.screenshots.count, 1)
 
         let newDir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try! FileManager.default.createDirectory(at: newDir, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: newDir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: newDir) }
 
         let newFile = newDir.appendingPathComponent("Screenshot new1.png")
@@ -161,7 +160,7 @@ final class ScreenshotStoreTests: XCTestCase {
         XCTAssertTrue(store.screenshots.allSatisfy { $0.filename.contains("new") })
     }
 
-    func testUpdateDirectoryClearsThumbnails() {
+    func testUpdateDirectoryClearsThumbnails() throws {
         createPNG("Screenshot test.png")
         let store = ScreenshotStore(directory: tempDir)
 
@@ -169,7 +168,7 @@ final class ScreenshotStoreTests: XCTestCase {
         store.thumbnails[tempDir.appendingPathComponent("Screenshot test.png")] = NSImage()
 
         let newDir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        try! FileManager.default.createDirectory(at: newDir, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: newDir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: newDir) }
 
         store.updateDirectory(newDir)
@@ -202,7 +201,7 @@ final class ScreenshotStoreTests: XCTestCase {
         XCTAssertEqual(store.screenshots.count, 1)
     }
 
-    func testFileWatcherDetectsDeletion() {
+    func testFileWatcherDetectsDeletion() throws {
         createPNG("Screenshot deleteme.png")
         let store = ScreenshotStore(directory: tempDir)
         XCTAssertEqual(store.screenshots.count, 1)
@@ -217,7 +216,7 @@ final class ScreenshotStoreTests: XCTestCase {
                 }
             }
 
-        try! FileManager.default.removeItem(at: tempDir.appendingPathComponent("Screenshot deleteme.png"))
+        try FileManager.default.removeItem(at: tempDir.appendingPathComponent("Screenshot deleteme.png"))
 
         wait(for: [expectation], timeout: 5.0)
         cancellable.cancel()

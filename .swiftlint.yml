@@ -1,0 +1,31 @@
+included:
+  - ScreenPal
+  - ScreenPalTests
+
+excluded:
+  - .build
+  - DerivedData
+
+disabled_rules:
+  - trailing_comma
+  - opening_brace
+  - statement_position
+  - multiple_closures_with_trailing_closure
+
+force_try:
+  severity: warning
+
+line_length:
+  warning: 120
+  error: 200
+
+identifier_name:
+  min_length:
+    warning: 1
+  excluded:
+    - fd
+    - id
+    - x
+    - y
+
+reporter: xcode

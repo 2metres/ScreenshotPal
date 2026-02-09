@@ -57,7 +57,7 @@ struct SettingsView: View {
                     Slider(value: Binding(
                         get: { Double(directoryManager.gridColumns) },
                         set: { directoryManager.gridColumns = Int($0) }
-                    ), in: 1...4, step: 1)
+                    ), in: 1 ... 4, step: 1)
                 }
 
                 Text("\(directoryManager.gridColumns) column\(directoryManager.gridColumns == 1 ? "" : "s")")
@@ -74,7 +74,7 @@ struct SettingsView: View {
                 Label("Move All to Trash", systemImage: "trash")
             }
             .alert("Move All to Trash?", isPresented: $showTrashConfirmation) {
-                Button("Cancel", role: .cancel) { }
+                Button("Cancel", role: .cancel) {}
                 Button("Move to Trash", role: .destructive) {
                     onTrashAll()
                 }

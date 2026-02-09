@@ -2,7 +2,6 @@ import XCTest
 @testable import ScreenPal
 
 final class ScreenshotDirectoryManagerTests: XCTestCase {
-
     private let customPathKey = "customScreenshotDirectory"
 
     override func tearDown() {

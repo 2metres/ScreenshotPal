@@ -34,12 +34,16 @@ class ScreenshotStore: ObservableObject {
         let fileManager = FileManager.default
 
         do {
-            let files = try fileManager.contentsOfDirectory(at: screenshotDirectory, includingPropertiesForKeys: [.creationDateKey])
+            let files = try fileManager.contentsOfDirectory(
+                at: screenshotDirectory,
+                includingPropertiesForKeys: [.creationDateKey]
+            )
 
             let supportedExtensions: Set<String> = ["png", "mov"]
             let loaded = files
                 .filter { supportedExtensions.contains($0.pathExtension.lowercased()) &&
-                    ($0.lastPathComponent.contains("Screenshot") || $0.lastPathComponent.contains("Screen Recording")) }
+                    ($0.lastPathComponent.contains("Screenshot") || $0.lastPathComponent.contains("Screen Recording"))
+                }
                 .map { Screenshot(url: $0) }
                 .sorted { $0.createdAt > $1.createdAt }
                 .prefix(30)
@@ -69,7 +73,7 @@ class ScreenshotStore: ObservableObject {
                 representationTypes: .thumbnail
             )
 
-            QLThumbnailGenerator.shared.generateBestRepresentation(for: request) { [weak self] representation, error in
+            QLThumbnailGenerator.shared.generateBestRepresentation(for: request) { [weak self] representation, _ in
                 guard let representation = representation else { return }
                 DispatchQueue.main.async {
                     guard let self = self else { return }
