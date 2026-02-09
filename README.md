@@ -9,6 +9,10 @@ A lightweight macOS menubar app for browsing, previewing, and managing your scre
 ![macOS](https://img.shields.io/badge/macOS-14.0+-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange)
 
+<p align="center">
+  <img src="screenshot.png" width="390" alt="ScreenshotPal screenshot">
+</p>
+
 ## Features
 
 - **Menubar access** — Lives in your menubar for instant access. No dock icon.
