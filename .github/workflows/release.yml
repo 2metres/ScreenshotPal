@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: macos-15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Build Release
+        run: |
+          xcodebuild build \
+            -project ScreenPal.xcodeproj \
+            -scheme ScreenPal \
+            -configuration Release \
+            -derivedDataPath build
+
+      - name: Run Tests
+        run: |
+          xcodebuild test \
+            -project ScreenPal.xcodeproj \
+            -scheme ScreenPalTests \
+            -configuration Debug \
+            -destination 'platform=macOS'
+
+      - name: Create DMG
+        run: |
+          APP_PATH="build/Build/Products/Release/ScreenPal.app"
+          DMG_NAME="ScreenPal-${GITHUB_REF_NAME}.dmg"
+
+          mkdir -p dmg_staging
+          cp -R "$APP_PATH" dmg_staging/
+          ln -s /Applications dmg_staging/Applications
+
+          hdiutil create -volname "ScreenPal" \
+            -srcfolder dmg_staging \
+            -ov -format UDZO \
+            "$DMG_NAME"
+
+          echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.DMG_NAME }}
+          generate_release_notes: true
