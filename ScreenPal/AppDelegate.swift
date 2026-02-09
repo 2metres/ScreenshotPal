@@ -9,6 +9,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     var statusItem: NSStatusItem?
     var popover: NSPopover?
     var statusMenu: NSMenu?
+    var preventClose = false
+    private var clickMonitor: Any?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -26,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
 
         popover = NSPopover()
         popover?.contentSize = NSSize(width: 320, height: 400)
-        popover?.behavior = .transient
+        popover?.behavior = .applicationDefined
         popover?.delegate = self
         popover?.contentViewController = NSHostingController(rootView: MenubarPopover())
     }
@@ -36,7 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         let event = NSApp.currentEvent
 
         if event?.type == .rightMouseUp {
-            popover?.performClose(nil)
+            closePopover()
             statusItem?.menu = statusMenu
             button.performClick(nil)
             statusItem?.menu = nil
@@ -46,14 +48,35 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         guard let popover = popover else { return }
 
         if popover.isShown {
-            popover.performClose(nil)
+            closePopover()
         } else {
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
             popover.contentViewController?.view.window?.makeKey()
+            startClickMonitor()
+        }
+    }
+
+    private func closePopover() {
+        popover?.performClose(nil)
+        stopClickMonitor()
+    }
+
+    private func startClickMonitor() {
+        clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
+            guard let self = self, !self.preventClose else { return }
+            self.closePopover()
+        }
+    }
+
+    private func stopClickMonitor() {
+        if let monitor = clickMonitor {
+            NSEvent.removeMonitor(monitor)
+            clickMonitor = nil
         }
     }
 
     func popoverDidClose(_ notification: Notification) {
+        stopClickMonitor()
         NotificationCenter.default.post(name: .popoverDidClose, object: nil)
     }
 }

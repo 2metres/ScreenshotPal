@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ScreenshotThumbnail: View {
     let screenshot: Screenshot
+    let isSelected: Bool
+    let onSelect: () -> Void
     @State private var isHovering = false
 
     var body: some View {
@@ -22,7 +24,7 @@ struct ScreenshotThumbnail: View {
         }
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(isHovering ? Color.accentColor : Color.clear, lineWidth: 2)
+                .stroke(isSelected ? Color.accentColor : (isHovering ? Color.accentColor.opacity(0.5) : Color.clear), lineWidth: 2)
         )
         .onHover { hovering in
             isHovering = hovering
@@ -32,6 +34,9 @@ struct ScreenshotThumbnail: View {
         }
         .onTapGesture(count: 2) {
             NSWorkspace.shared.open(screenshot.url)
+        }
+        .onTapGesture(count: 1) {
+            onSelect()
         }
         .help(screenshot.filename)
     }
