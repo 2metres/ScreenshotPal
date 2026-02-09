@@ -17,7 +17,20 @@
 		A10000080000000000000008 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000080000000000000008 /* Assets.xcassets */; };
 		A10000090000000000000009 /* ScreenshotDirectoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* ScreenshotDirectoryManager.swift */; };
 		A100000A000000000000000A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000C /* SettingsView.swift */; };
+		B10000010000000000000001 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000010000000000000001 /* ScreenshotTests.swift */; };
+		B10000020000000000000002 /* ScreenshotDirectoryManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000020000000000000002 /* ScreenshotDirectoryManagerTests.swift */; };
+		B10000030000000000000003 /* ScreenshotStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000030000000000000003 /* ScreenshotStoreTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B30000010000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A80000010000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50000010000000000000001;
+			remoteInfo = ScreenPal;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A20000010000000000000001 /* ScreenPalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPalApp.swift; sourceTree = "<group>"; };
@@ -32,10 +45,21 @@
 		A200000A000000000000000A /* ScreenPal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenPal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2000000000000000000000B /* ScreenshotDirectoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotDirectoryManager.swift; sourceTree = "<group>"; };
 		A2000000000000000000000C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B20000010000000000000001 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
+		B20000020000000000000002 /* ScreenshotDirectoryManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotDirectoryManagerTests.swift; sourceTree = "<group>"; };
+		B20000030000000000000003 /* ScreenshotStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotStoreTests.swift; sourceTree = "<group>"; };
+		B200000A0000000000000001 /* ScreenPalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScreenPalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A30000010000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B30000020000000000000002 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -49,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				A40000020000000000000002 /* ScreenPal */,
+				B40000010000000000000001 /* ScreenPalTests */,
 				A40000060000000000000006 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,8 +124,19 @@
 			isa = PBXGroup;
 			children = (
 				A200000A000000000000000A /* ScreenPal.app */,
+				B200000A0000000000000001 /* ScreenPalTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B40000010000000000000001 /* ScreenPalTests */ = {
+			isa = PBXGroup;
+			children = (
+				B20000010000000000000001 /* ScreenshotTests.swift */,
+				B20000020000000000000002 /* ScreenshotDirectoryManagerTests.swift */,
+				B20000030000000000000003 /* ScreenshotStoreTests.swift */,
+			);
+			path = ScreenPalTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -123,6 +159,23 @@
 			productReference = A200000A000000000000000A /* ScreenPal.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B50000010000000000000001 /* ScreenPalTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B70000010000000000000001 /* Build configuration list for PBXNativeTarget "ScreenPalTests" */;
+			buildPhases = (
+				B60000010000000000000001 /* Sources */,
+				B30000020000000000000002 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B30000030000000000000003 /* PBXTargetDependency */,
+			);
+			name = ScreenPalTests;
+			productName = ScreenPalTests;
+			productReference = B200000A0000000000000001 /* ScreenPalTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -135,6 +188,10 @@
 				TargetAttributes = {
 					A50000010000000000000001 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					B50000010000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = A50000010000000000000001;
 					};
 				};
 			};
@@ -152,6 +209,7 @@
 			projectRoot = "";
 			targets = (
 				A50000010000000000000001 /* ScreenPal */,
+				B50000010000000000000001 /* ScreenPalTests */,
 			);
 		};
 /* End PBXProject section */
@@ -184,7 +242,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B60000010000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B10000010000000000000001 /* ScreenshotTests.swift in Sources */,
+				B10000020000000000000002 /* ScreenshotDirectoryManagerTests.swift in Sources */,
+				B10000030000000000000003 /* ScreenshotStoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B30000030000000000000003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50000010000000000000001 /* ScreenPal */;
+			targetProxy = B30000010000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A90000010000000000000001 /* Debug */ = {
@@ -359,6 +435,40 @@
 			};
 			name = Release;
 		};
+		B90000010000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.screenpal.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScreenPal.app/Contents/MacOS/ScreenPal";
+			};
+			name = Debug;
+		};
+		B90000020000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.screenpal.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScreenPal.app/Contents/MacOS/ScreenPal";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -376,6 +486,15 @@
 			buildConfigurations = (
 				A90000030000000000000003 /* Debug */,
 				A90000040000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B70000010000000000000001 /* Build configuration list for PBXNativeTarget "ScreenPalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B90000010000000000000001 /* Debug */,
+				B90000020000000000000002 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

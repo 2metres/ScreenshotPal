@@ -73,3 +73,7 @@ Requires macOS 14+ and Xcode 15+.
 2. **Left-click** the icon to open the screenshot browser.
 3. **Right-click** the icon to quit.
 4. Click the gear icon to change the screenshot directory.
+
+## Credits
+
+App icon by [bloxxk](https://macosicons.com/#/u/bloxxk) via [macOS Icons](https://macosicons.com).
