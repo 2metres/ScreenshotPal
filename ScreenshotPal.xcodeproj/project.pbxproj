@@ -16,6 +16,7 @@
 		A10000070000000000000007 /* ScreenshotThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000070000000000000007 /* ScreenshotThumbnail.swift */; };
 		A10000080000000000000008 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000080000000000000008 /* Assets.xcassets */; };
 		A100000B000000000000000B /* AppIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000D /* AppIcon.png */; };
+		A100000C000000000000000C /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* AppIcon.icns */; };
 		A10000090000000000000009 /* ScreenshotDirectoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* ScreenshotDirectoryManager.swift */; };
 		A100000A000000000000000A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000C /* SettingsView.swift */; };
 		B10000010000000000000001 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000010000000000000001 /* ScreenshotTests.swift */; };
@@ -47,6 +48,7 @@
 		A2000000000000000000000B /* ScreenshotDirectoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotDirectoryManager.swift; sourceTree = "<group>"; };
 		A2000000000000000000000C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A2000000000000000000000D /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon.png; sourceTree = "<group>"; };
+		A2000000000000000000000E /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		B20000010000000000000001 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
 		B20000020000000000000002 /* ScreenshotDirectoryManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotDirectoryManagerTests.swift; sourceTree = "<group>"; };
 		B20000030000000000000003 /* ScreenshotStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotStoreTests.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			children = (
 				A20000080000000000000008 /* Assets.xcassets */,
 				A2000000000000000000000D /* AppIcon.png */,
+				A2000000000000000000000E /* AppIcon.icns */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -226,6 +229,7 @@
 			files = (
 				A10000080000000000000008 /* Assets.xcassets in Resources */,
 				A100000B000000000000000B /* AppIcon.png in Resources */,
+				A100000C000000000000000C /* AppIcon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
