@@ -9,9 +9,22 @@ A lightweight macOS menubar app for browsing, previewing, and managing your scre
 ![macOS](https://img.shields.io/badge/macOS-14.0+-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9-orange)
 
+<table>
+<tbody>
+<tr>
+<td>
 <p align="center">
-  <img src="screenshot.png" width="390" alt="ScreenshotPal screenshot">
+  <img src="screenshot-light.png" width="390" alt="ScreenshotPal screenshot light">
 </p>
+</td>
+<td>
+<p align="center">
+  <img src="screenshot-dark.png" width="390" alt="ScreenshotPal screenshot dark">
+</p>
+</td>
+</tr>
+</tbody>
+<table>
 
 ## Features
 
