@@ -1,10 +1,11 @@
 import Foundation
 import AppKit
-import AVFoundation
+import QuickLookThumbnailing
 import Combine
 
 class ScreenshotStore: ObservableObject {
     @Published var screenshots: [Screenshot] = []
+    @Published var thumbnails: [URL: NSImage] = [:]
     @Published var selectedID: UUID?
 
     private var screenshotDirectory: URL
@@ -23,6 +24,7 @@ class ScreenshotStore: ObservableObject {
     func updateDirectory(_ newDirectory: URL) {
         stopWatching()
         screenshotDirectory = newDirectory
+        thumbnails = [:]
         screenshots = []
         loadScreenshots()
         startWatching()
@@ -35,7 +37,7 @@ class ScreenshotStore: ObservableObject {
             let files = try fileManager.contentsOfDirectory(at: screenshotDirectory, includingPropertiesForKeys: [.creationDateKey])
 
             let supportedExtensions: Set<String> = ["png", "mov"]
-            var loaded = files
+            let loaded = files
                 .filter { supportedExtensions.contains($0.pathExtension.lowercased()) &&
                     ($0.lastPathComponent.contains("Screenshot") || $0.lastPathComponent.contains("Screen Recording")) }
                 .map { Screenshot(url: $0) }
@@ -43,27 +45,38 @@ class ScreenshotStore: ObservableObject {
                 .prefix(30)
                 .map { $0 }
 
-            for i in loaded.indices {
-                if loaded[i].isVideo {
-                    loaded[i].image = Self.videoThumbnail(for: loaded[i].url)
-                } else {
-                    loaded[i].image = NSImage(contentsOf: loaded[i].url)
-                }
-            }
-
             screenshots = loaded
+
+            // Generate thumbnails for any that aren't cached yet
+            let uncached = loaded.filter { thumbnails[$0.url] == nil }
+            if !uncached.isEmpty {
+                generateThumbnails(for: uncached)
+            }
         } catch {
             print("Error loading screenshots: \(error)")
         }
     }
 
-    private static func videoThumbnail(for url: URL) -> NSImage? {
-        let asset = AVAsset(url: url)
-        let generator = AVAssetImageGenerator(asset: asset)
-        generator.appliesPreferredTrackTransform = true
-        generator.maximumSize = CGSize(width: 400, height: 400)
-        guard let cgImage = try? generator.copyCGImage(at: .zero, actualTime: nil) else { return nil }
-        return NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height))
+    private func generateThumbnails(for items: [Screenshot]) {
+        let scale = NSScreen.main?.backingScaleFactor ?? 2.0
+        let size = CGSize(width: 180, height: 180)
+
+        for screenshot in items {
+            let request = QLThumbnailGenerator.Request(
+                fileAt: screenshot.url,
+                size: size,
+                scale: scale,
+                representationTypes: .thumbnail
+            )
+
+            QLThumbnailGenerator.shared.generateBestRepresentation(for: request) { [weak self] representation, error in
+                guard let representation = representation else { return }
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.thumbnails[screenshot.url] = representation.nsImage
+                }
+            }
+        }
     }
 
     private func startWatching() {

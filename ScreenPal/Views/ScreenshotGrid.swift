@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ScreenshotGrid: View {
     let screenshots: [Screenshot]
+    let thumbnails: [URL: NSImage]
     @Binding var selectedID: UUID?
 
     let columns = [
@@ -15,6 +16,7 @@ struct ScreenshotGrid: View {
             ForEach(screenshots) { screenshot in
                 ScreenshotThumbnail(
                     screenshot: screenshot,
+                    thumbnail: thumbnails[screenshot.url],
                     isSelected: selectedID == screenshot.id,
                     onSelect: { selectedID = screenshot.id }
                 )

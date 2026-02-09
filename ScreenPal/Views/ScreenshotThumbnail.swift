@@ -3,13 +3,14 @@ import AppKit
 
 struct ScreenshotThumbnail: View {
     let screenshot: Screenshot
+    let thumbnail: NSImage?
     let isSelected: Bool
     let onSelect: () -> Void
     @State private var isHovering = false
 
     var body: some View {
         Group {
-            if let image = screenshot.image {
+            if let image = thumbnail {
                 Image(nsImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)

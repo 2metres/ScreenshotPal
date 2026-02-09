@@ -7,7 +7,6 @@ struct Screenshot: Identifiable, Hashable {
     let filename: String
     let createdAt: Date
     let isVideo: Bool
-    var image: NSImage?
 
     init(url: URL) {
         self.url = url

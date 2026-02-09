@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="ScreenPal/Resources/Assets.xcassets/AppIcon.appiconset/icon_128x128@2x.png" width="128" height="128" alt="ScreenPal icon">
+</p>
+
 # ScreenPal
 
 A lightweight macOS menubar app for browsing, previewing, and managing your screenshots and screen recordings.

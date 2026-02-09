@@ -51,7 +51,7 @@ class QuickLookCoordinator {
 }
 
 class NonActivatingPanel: NSPanel {
-    override var canBecomeKey: Bool { false }
+    override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
 }
 
@@ -95,11 +95,6 @@ struct MenubarPopover: View {
                         Image(systemName: "gearshape")
                     }
                     .buttonStyle(.borderless)
-
-                    Button(action: { store.loadScreenshots() }) {
-                        Image(systemName: "arrow.clockwise")
-                    }
-                    .buttonStyle(.borderless)
                 }
                 .padding()
 
@@ -117,7 +112,7 @@ struct MenubarPopover: View {
                     }
                 } else {
                     ScrollView {
-                        ScreenshotGrid(screenshots: store.screenshots, selectedID: $store.selectedID)
+                        ScreenshotGrid(screenshots: store.screenshots, thumbnails: store.thumbnails, selectedID: $store.selectedID)
                             .padding()
                     }
 
@@ -132,6 +127,9 @@ struct MenubarPopover: View {
             }
         }
         .frame(width: 320, height: 400)
+        .onReceive(NotificationCenter.default.publisher(for: .popoverDidOpen)) { _ in
+            store.loadScreenshots()
+        }
         .onReceive(NotificationCenter.default.publisher(for: .popoverDidClose)) { _ in
             showSettings = false
             store.selectedID = nil
