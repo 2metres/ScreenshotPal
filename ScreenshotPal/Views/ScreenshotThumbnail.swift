@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import UniformTypeIdentifiers
 
 struct ScreenshotThumbnail: View {
     let screenshot: Screenshot
@@ -61,7 +62,26 @@ struct ScreenshotThumbnail: View {
             isHovering = hovering
         }
         .onDrag {
-            NSItemProvider(object: screenshot.url as NSURL)
+            let provider = NSItemProvider()
+            let url = screenshot.url
+            let type = UTType(filenameExtension: url.pathExtension) ?? .data
+
+            provider.suggestedName = url.lastPathComponent
+
+            // Provide the actual file so drop targets receive file data (like Finder)
+            provider.registerFileRepresentation(
+                forTypeIdentifier: type.identifier,
+                fileOptions: [],
+                visibility: .all
+            ) { completion in
+                completion(url, false, nil)
+                return nil
+            }
+
+            // Fallback: provide the file URL for drop targets that accept URLs
+            provider.registerObject(url as NSURL, visibility: .all)
+
+            return provider
         }
         .onTapGesture(count: 2) {
             NSWorkspace.shared.open(screenshot.url)
