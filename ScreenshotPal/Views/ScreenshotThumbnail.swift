@@ -58,6 +58,7 @@ struct ScreenshotThumbnail: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(isSelected || isHovering ? Color.accentColor : Color.clear, lineWidth: 4)
         )
+        .contentShape(Rectangle())
         .onHover { hovering in
             isHovering = hovering
         }
