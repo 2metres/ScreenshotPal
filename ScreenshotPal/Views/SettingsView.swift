@@ -1,8 +1,10 @@
-import SwiftUI
 import AppKit
+import Sparkle
+import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var directoryManager: ScreenshotDirectoryManager
+    var updater: SPUUpdater
     var onDirectoryChanged: (URL) -> Void
     var onTrashAll: () -> Void
     @State private var showTrashConfirmation = false
@@ -64,6 +66,11 @@ struct SettingsView: View {
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
+
+            Divider()
+
+            // Updates section
+            CheckForUpdatesView(updater: updater)
 
             Divider()
 

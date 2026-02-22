@@ -1,4 +1,5 @@
 import Cocoa
+import Sparkle
 import SwiftUI
 
 extension Notification.Name {
@@ -11,6 +12,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     var popover: NSPopover?
     var statusMenu: NSMenu?
     var preventClose = false
+    let updaterController = SPUStandardUpdaterController(
+        startingUpdater: true,
+        updaterDelegate: nil,
+        userDriverDelegate: nil
+    )
     private var clickMonitor: Any?
 
     func applicationDidFinishLaunching(_: Notification) {
@@ -32,6 +38,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         }
 
         let menu = NSMenu()
+        menu.addItem(NSMenuItem(
+            title: "Check for Updates...",
+            action: #selector(SPUStandardUpdaterController.checkForUpdates(_:)),
+            keyEquivalent: ""
+        ))
+        menu.items.last?.target = updaterController
+        menu.addItem(.separator())
         menu.addItem(NSMenuItem(
             title: "Quit ScreenshotPal",
             action: #selector(NSApplication.terminate(_:)),

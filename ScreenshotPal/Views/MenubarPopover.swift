@@ -1,5 +1,6 @@
-import SwiftUI
 import Quartz
+import Sparkle
+import SwiftUI
 
 class QuickLookCoordinator {
     private var panel: NSPanel?
@@ -86,11 +87,17 @@ struct MenubarPopover: View {
 
                 Divider()
 
-                SettingsView(directoryManager: directoryManager, onDirectoryChanged: { newURL in
-                    store.updateDirectory(newURL)
-                }, onTrashAll: {
-                    store.trashAll()
-                })
+                SettingsView(
+                    directoryManager: directoryManager,
+                    // swiftlint:disable:next force_cast
+                    updater: (NSApp.delegate as! AppDelegate).updaterController.updater,
+                    onDirectoryChanged: { newURL in
+                        store.updateDirectory(newURL)
+                    },
+                    onTrashAll: {
+                        store.trashAll()
+                    }
+                )
 
                 Spacer()
             } else {
