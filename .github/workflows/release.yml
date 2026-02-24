@@ -100,29 +100,33 @@ jobs:
           # Create appcast.xml if it doesn't exist
           if [ ! -f appcast.xml ]; then
             cat > appcast.xml << 'XMLEOF'
-          <?xml version="1.0" encoding="utf-8"?>
-          <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
-            <channel>
-              <title>ScreenshotPal</title>
-              <link>https://2metres.github.io/ScreenshotPal/appcast.xml</link>
-              <description>ScreenshotPal updates</description>
-              <language>en</language>
-            </channel>
-          </rss>
-          XMLEOF
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>ScreenshotPal</title>
+    <link>https://2metres.github.io/ScreenshotPal/appcast.xml</link>
+    <description>ScreenshotPal updates</description>
+    <language>en</language>
+  </channel>
+</rss>
+XMLEOF
           fi
 
-          # Build the new item XML
-          NEW_ITEM="    <item>
-                <title>Version ${APP_VERSION}</title>
-                <pubDate>${PUB_DATE}</pubDate>
-                <sparkle:version>${APP_BUILD}</sparkle:version>
-                <sparkle:shortVersionString>${APP_VERSION}</sparkle:shortVersionString>
-                <enclosure url=\"${DOWNLOAD_URL}\" sparkle:edSignature=\"${ED_SIGNATURE}\" length=\"${DMG_LENGTH}\" type=\"application/octet-stream\" />
-              </item>"
-
           # Insert new item before closing </channel> tag
-          sed -i '' "s|</channel>|${NEW_ITEM}\n    </channel>|" appcast.xml
+          python3 -c "
+import sys
+item = '''    <item>
+          <title>Version ${APP_VERSION}</title>
+          <pubDate>${PUB_DATE}</pubDate>
+          <sparkle:version>${APP_BUILD}</sparkle:version>
+          <sparkle:shortVersionString>${APP_VERSION}</sparkle:shortVersionString>
+          <enclosure url=\"${DOWNLOAD_URL}\" sparkle:edSignature=\"${ED_SIGNATURE}\" length=\"${DMG_LENGTH}\" type=\"application/octet-stream\" />
+        </item>
+    '''
+xml = open('appcast.xml').read()
+xml = xml.replace('</channel>', item + '</channel>')
+open('appcast.xml', 'w').write(xml)
+          "
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
