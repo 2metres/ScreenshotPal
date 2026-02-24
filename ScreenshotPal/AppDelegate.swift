@@ -57,7 +57,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         popover?.contentSize = NSSize(width: 320, height: 400)
         popover?.behavior = .applicationDefined
         popover?.delegate = self
-        popover?.contentViewController = NSHostingController(rootView: MenubarPopover())
+        popover?
+            .contentViewController = NSHostingController(rootView: MenubarPopover(updater: updaterController.updater))
     }
 
     @objc func togglePopover() {

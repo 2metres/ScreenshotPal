@@ -62,6 +62,7 @@ class NonActivatingPanel: NSPanel {
 }
 
 struct MenubarPopover: View {
+    let updater: SPUUpdater
     @StateObject private var directoryManager = ScreenshotDirectoryManager()
     @StateObject private var store = ScreenshotStore()
     @State private var showSettings = false
@@ -89,8 +90,7 @@ struct MenubarPopover: View {
 
                 SettingsView(
                     directoryManager: directoryManager,
-                    // swiftlint:disable:next force_cast
-                    updater: (NSApp.delegate as! AppDelegate).updaterController.updater,
+                    updater: updater,
                     onDirectoryChanged: { newURL in
                         store.updateDirectory(newURL)
                     },
