@@ -89,43 +89,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="${GITHUB_REF_NAME}"
-          DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${DMG_NAME}"
-          PUB_DATE=$(date -u +"%a, %d %b %Y %H:%M:%S %z")
+          export DOWNLOAD_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${DMG_NAME}"
+          export PUB_DATE=$(date -u +"%a, %d %b %Y %H:%M:%S %z")
 
-          # Clone gh-pages branch
           git clone --branch gh-pages --single-branch "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" gh-pages-repo
-
           cd gh-pages-repo
 
-          # Create appcast.xml if it doesn't exist
-          if [ ! -f appcast.xml ]; then
-            cat > appcast.xml << 'XMLEOF'
-<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
-  <channel>
-    <title>ScreenshotPal</title>
-    <link>https://2metres.github.io/ScreenshotPal/appcast.xml</link>
-    <description>ScreenshotPal updates</description>
-    <language>en</language>
-  </channel>
-</rss>
-XMLEOF
-          fi
-
-          # Insert new item before closing </channel> tag
           python3 -c "
-import sys
-item = '''    <item>
-          <title>Version ${APP_VERSION}</title>
-          <pubDate>${PUB_DATE}</pubDate>
-          <sparkle:version>${APP_BUILD}</sparkle:version>
-          <sparkle:shortVersionString>${APP_VERSION}</sparkle:shortVersionString>
-          <enclosure url=\"${DOWNLOAD_URL}\" sparkle:edSignature=\"${ED_SIGNATURE}\" length=\"${DMG_LENGTH}\" type=\"application/octet-stream\" />
-        </item>
-    '''
-xml = open('appcast.xml').read()
-xml = xml.replace('</channel>', item + '</channel>')
-open('appcast.xml', 'w').write(xml)
+          import os;
+          item='    <item>\n      <title>Version {v}</title>\n      <pubDate>{d}</pubDate>\n      <sparkle:version>{b}</sparkle:version>\n      <sparkle:shortVersionString>{v}</sparkle:shortVersionString>\n      <enclosure url=\"{u}\" sparkle:edSignature=\"{s}\" length=\"{l}\" type=\"application/octet-stream\" />\n    </item>\n  '.format(v=os.environ['APP_VERSION'],d=os.environ['PUB_DATE'],b=os.environ['APP_BUILD'],u=os.environ['DOWNLOAD_URL'],s=os.environ['ED_SIGNATURE'],l=os.environ['DMG_LENGTH']);
+          xml=open('appcast.xml').read();
+          open('appcast.xml','w').write(xml.replace('</channel>',item+'</channel>'))
           "
 
           git config user.name "github-actions[bot]"
