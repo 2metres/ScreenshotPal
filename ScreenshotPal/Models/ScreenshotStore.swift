@@ -30,7 +30,8 @@ class ScreenshotStore: ObservableObject {
         startWatching()
     }
 
-    func loadScreenshots() {
+    /// All screenshot/recording files in the directory, newest first (no display cap).
+    private func matchingScreenshots() -> [Screenshot] {
         let fileManager = FileManager.default
 
         do {
@@ -40,24 +41,27 @@ class ScreenshotStore: ObservableObject {
             )
 
             let supportedExtensions: Set = ["png", "mov"]
-            let loaded = files
+            return files
                 .filter { supportedExtensions.contains($0.pathExtension.lowercased()) &&
                     ($0.lastPathComponent.contains("Screenshot") || $0.lastPathComponent.contains("Screen Recording"))
                 }
                 .map { Screenshot(url: $0) }
                 .sorted { $0.createdAt > $1.createdAt }
-                .prefix(30)
-                .map { $0 }
-
-            screenshots = loaded
-
-            // Generate thumbnails for any that aren't cached yet
-            let uncached = loaded.filter { thumbnails[$0.url] == nil }
-            if !uncached.isEmpty {
-                generateThumbnails(for: uncached)
-            }
         } catch {
             print("Error loading screenshots: \(error)")
+            return []
+        }
+    }
+
+    func loadScreenshots() {
+        let loaded = Array(matchingScreenshots().prefix(30))
+
+        screenshots = loaded
+
+        // Generate thumbnails for any that aren't cached yet
+        let uncached = loaded.filter { thumbnails[$0.url] == nil }
+        if !uncached.isEmpty {
+            generateThumbnails(for: uncached)
         }
     }
 
@@ -107,7 +111,7 @@ class ScreenshotStore: ObservableObject {
 
     func trashAll() {
         let fileManager = FileManager.default
-        for screenshot in screenshots {
+        for screenshot in matchingScreenshots() {
             do {
                 try fileManager.trashItem(at: screenshot.url, resultingItemURL: nil)
                 thumbnails[screenshot.url] = nil
