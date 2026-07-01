@@ -39,7 +39,7 @@ class ScreenshotStore: ObservableObject {
                 includingPropertiesForKeys: [.creationDateKey]
             )
 
-            let supportedExtensions: Set<String> = ["png", "mov"]
+            let supportedExtensions: Set = ["png", "mov"]
             let loaded = files
                 .filter { supportedExtensions.contains($0.pathExtension.lowercased()) &&
                     ($0.lastPathComponent.contains("Screenshot") || $0.lastPathComponent.contains("Screen Recording"))
@@ -110,10 +110,12 @@ class ScreenshotStore: ObservableObject {
         for screenshot in screenshots {
             do {
                 try fileManager.trashItem(at: screenshot.url, resultingItemURL: nil)
+                thumbnails[screenshot.url] = nil
             } catch {
                 print("Error trashing \(screenshot.filename): \(error)")
             }
         }
+        screenshots.removeAll { fileManager.fileExists(atPath: $0.url.path) == false }
     }
 
     deinit {
