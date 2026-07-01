@@ -19,5 +19,12 @@
       <sparkle:shortVersionString>1.5</sparkle:shortVersionString>
       <enclosure url="https://github.com/2metres/ScreenshotPal/releases/download/v1.5.1/ScreenshotPal-v1.5.1.dmg" sparkle:edSignature="zO3UpkawzmnPJPyBHqd01CGgIgV14mdBiSmiJ1TRJ2nA36D5K7Il+40mJQNVU+8dRGjD6Pl/fEPubNVKJdxuAA==" length="2423579" type="application/octet-stream" />
     </item>
+      <item>
+      <title>Version 1.5.2</title>
+      <pubDate>Wed, 01 Jul 2026 01:03:08 +0000</pubDate>
+      <sparkle:version>2</sparkle:version>
+      <sparkle:shortVersionString>1.5.2</sparkle:shortVersionString>
+      <enclosure url="https://github.com/2metres/ScreenshotPal/releases/download/v1.5.2/ScreenshotPal-v1.5.2.dmg" sparkle:edSignature="79yxNqh90K9+35Dzwal+lsVZ9wpTWKVy61sSyAHZD/BiSE+Hv2VrNsGBF/kjhnV+6CxaReB3CjyFb+VN3LOtDQ==" length="2425806" type="application/octet-stream" />
+    </item>
   </channel>
 </rss>
